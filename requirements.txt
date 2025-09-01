@@ -1,0 +1,5 @@
+pygame>=2.5.0
+thorpy==2.1.11
+tween==0.0.3
+numpy>=1.26.0
+pillow>=11.3.0
