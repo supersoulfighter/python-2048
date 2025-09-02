@@ -10,7 +10,7 @@ from game.model.powerups import Powerups
 
 class GameModel:
     def __init__(self):
-        self.grid = Grid(4)
+        self.grid = Grid()
         self.score = Score()
         self.powerups = Powerups()
         self.state = GameStates.PLAYING

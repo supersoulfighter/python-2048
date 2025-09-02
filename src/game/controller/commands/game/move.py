@@ -1,4 +1,6 @@
 from typing import Tuple
+
+from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.view.game_view import GameView
@@ -20,7 +22,6 @@ def move(model: GameModel, view: GameView, direction: Tuple[int, int]) -> bool:
         return False
         
     # Update game state
-    model.state = GameStates.ANIMATING
     model.score.update(points)
 
     # Check for win condition
@@ -34,6 +35,6 @@ def move(model: GameModel, view: GameView, direction: Tuple[int, int]) -> bool:
     if not any(model.grid.is_valid_move(d) for d in [(0, 1), (1, 0), (0, -1), (-1, 0)]):
         model.state = GameStates.LOST
 
-        
-    view.update_score(model.score.current, model.score.high_score)
+    # Update view with current state
+    update_view(model, view)
     return True

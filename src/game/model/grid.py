@@ -1,12 +1,12 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import random
-
+from game.model.config import GRID_SIZE
 
 
 class Grid:
-    def __init__(self, size: int = 4):
-        self.size = size
-        self.cells = [[0] * size for _ in range(size)]
+    def __init__(self):
+        self.size = GRID_SIZE
+        self.cells = [[0] * self.size for _ in range(self.size)]
         self.moved_tiles: List[Tuple[Tuple[int, int], Tuple[int, int]]] = []  # [(from_pos, to_pos), ...]
         self.merged_tiles: List[Tuple[Tuple[int, int], int]] = []  # [(pos, value), ...]
         self.previous_state = None  # For undo/redo

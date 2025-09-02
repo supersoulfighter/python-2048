@@ -6,13 +6,6 @@ import thorpy
 
 
 class UIElement(thorpy.elements.Element):
-    def draw(self, surface: pygame.Surface):
-        # Call the ThorPy element's draw method
-        if hasattr(super(), 'draw'):
-            super().draw()
-    
-    def handle_event(self, event: pygame.event.Event) -> bool:
-        return loops.press(self, event)
     
     def set_position(self, x: int, y: int):
         self.set_topleft((x, y))

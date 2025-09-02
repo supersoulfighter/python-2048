@@ -1,11 +1,10 @@
-from typing import List, Tuple
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
 from game.view.game_view import GameView
 
 
-def undo(model: GameModel, view: GameView, target_value: int) -> bool:
+def undo(model: GameModel, view: GameView) -> bool:
     """Undo the last move."""
     if model.state != GameStates.PLAYING:
         return False
@@ -13,6 +12,8 @@ def undo(model: GameModel, view: GameView, target_value: int) -> bool:
     if model.powerups.consume(PowerupType.UNDO):
         model.grid.restore()
         model.score.restore()
+        view.update_grid(model.grid)
+        view.update_score(model.score.current, model.score.high_score)
         return True
 
     return False

@@ -1,5 +1,7 @@
 import pygame
 from typing import List
+
+from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.view.game_view import GameView
@@ -16,6 +18,7 @@ class GameController:
     def __init__(self, model: GameModel, view: GameView):
         self.model = model
         self.view = view
+        update_view(model, view)
 
 
     def update(self, events: List[pygame.event.Event]) -> None:

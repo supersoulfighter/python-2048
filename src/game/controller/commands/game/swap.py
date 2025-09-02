@@ -1,5 +1,5 @@
 from typing import Tuple
-from game.model.game_state import GameModel
+from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
 from game.view.game_view import GameView
@@ -38,6 +38,7 @@ def swap(model: GameModel, view: GameView, pos1: Tuple[int, int], pos2: Tuple[in
     view.create_tile_animation(pos2, pos1)
     
     model.state = GameStates.SWAPPING
+    view.update_grid(model.grid)
     view.update_powerups(model.powerup_manager.counts)
     return True
 

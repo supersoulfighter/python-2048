@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from game.model.game_state import GameModel
+from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
 from game.view.game_view import GameView
@@ -29,6 +29,7 @@ def delete(model: GameModel, view: GameView, target_value: int) -> bool:
     view.create_merge_animation((row, col), 0)
     
     model.state = GameStates.DELETING
+    view.update_grid(model.grid)
     view.update_powerups(model.powerup_manager.counts)
     return True
 
