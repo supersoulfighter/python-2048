@@ -4,15 +4,15 @@ import pygame
 from game.model.grid import Grid
 from game.model.score import Score
 from game.model.game_states import GameStates
-from game.model.powerups import PowerUpManager
+from game.model.powerups import Powerups
 
 
 
-class GameState:
+class GameModel:
     def __init__(self):
         self.grid = Grid(4)
-        self.score_manager = Score()
-        self.powerup_manager = PowerUpManager()
+        self.score = Score()
+        self.powerups = Powerups()
         self.state = GameStates.PLAYING
         self.clock = pygame.time.Clock()
 

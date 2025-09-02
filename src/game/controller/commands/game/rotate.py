@@ -1,18 +1,18 @@
 from typing import List, Tuple
-from game.model.game_state import GameState
+from game.model.game_state import GameModel
 from game.model.game_states import GameStates
-from game.model.powerups import PowerUpType
+from game.model.powerups import PowerupType
 from game.view.game_view import GameView
 
 
-def execute(model: GameState, view: GameView) -> bool:
+def rotate(model: GameModel, view: GameView) -> bool:
     """Execute a rotate powerup command to rotate the outer ring clockwise."""
     # Save current state
     model.grid.save_state()
     model.powerup_manager.save_state()
     
     # Try to use the powerup
-    if not model.powerup_manager.use_powerup(PowerUpType.ROTATE):
+    if not model.powerup_manager.use_powerup(PowerupType.ROTATE):
         return False
         
     size = model.grid.size
@@ -39,18 +39,8 @@ def execute(model: GameState, view: GameView) -> bool:
     return True
 
 
-def undo(model: GameState, view: GameView) -> bool:
-    """Undo a rotate powerup command."""
-    grid_restored = model.grid.restore_state()
-    powerups_restored = model.powerup_manager.restore_state()
-    
-    if grid_restored and powerups_restored:
-        view.update_powerups(model.powerup_manager.counts)
-        return True
-    return False
 
-
-def _get_outer_ring(model: GameState) -> List[Tuple[int, int, int]]:
+def _get_outer_ring(model: GameModel) -> List[Tuple[int, int, int]]:
     """Get positions and values of the outer ring tiles."""
     size = model.grid.size
     ring = []

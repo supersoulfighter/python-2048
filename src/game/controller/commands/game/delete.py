@@ -1,18 +1,18 @@
 from typing import List, Tuple
-from game.model.game_state import GameState
+from game.model.game_state import GameModel
 from game.model.game_states import GameStates
-from game.model.powerups import PowerUpType
+from game.model.powerups import PowerupType
 from game.view.game_view import GameView
 
 
-def execute(model: GameState, view: GameView, target_value: int) -> bool:
+def delete(model: GameModel, view: GameView, target_value: int) -> bool:
     """Execute a delete powerup command for a specific tile value."""
     # Save current state
     model.grid.save_state()
     model.powerup_manager.save_state()
     
     # Try to use the powerup
-    if not model.powerup_manager.use_powerup(PowerUpType.DELETE):
+    if not model.powerup_manager.use_powerup(PowerupType.DELETE):
         return False
         
     # Find all tiles with target value
@@ -33,18 +33,7 @@ def execute(model: GameState, view: GameView, target_value: int) -> bool:
     return True
 
 
-def undo(model: GameState, view: GameView) -> bool:
-    """Undo a delete powerup command."""
-    grid_restored = model.grid.restore_state()
-    powerups_restored = model.powerup_manager.restore_state()
-    
-    if grid_restored and powerups_restored:
-        view.update_powerups(model.powerup_manager.counts)
-        return True
-    return False
-
-
-def _find_tiles_with_value(model: GameState, value: int) -> List[Tuple[int, int]]:
+def _find_tiles_with_value(model: GameModel, value: int) -> List[Tuple[int, int]]:
     """Find all tiles with the given value."""
     tiles = []
     for row in range(model.grid.size):

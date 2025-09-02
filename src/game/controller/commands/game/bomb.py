@@ -1,18 +1,18 @@
 from typing import List, Tuple
-from game.model.game_state import GameState
+from game.model.game_state import GameModel
 from game.model.game_states import GameStates
-from game.model.powerups import PowerUpType
+from game.model.powerups import PowerupType
 from game.view.game_view import GameView
 
 
-def execute(model: GameState, view: GameView, center_pos: Tuple[int, int]) -> bool:
+def bomb(model: GameModel, view: GameView, center_pos: Tuple[int, int]) -> bool:
     """Execute a bomb powerup command to clear a tile and its adjacent tiles."""
     # Save current state
     model.grid.save_state()
     model.powerup_manager.save_state()
     
     # Try to use the powerup
-    if not model.powerup_manager.use_powerup(PowerUpType.BOMB):
+    if not model.powerup_manager.use_powerup(PowerupType.BOMB):
         return False
         
     # Get positions to clear
@@ -33,7 +33,7 @@ def execute(model: GameState, view: GameView, center_pos: Tuple[int, int]) -> bo
 
 
 
-def _get_bomb_positions(model: GameState, center_pos: Tuple[int, int]) -> List[Tuple[int, int]]:
+def _get_bomb_positions(model: GameModel, center_pos: Tuple[int, int]) -> List[Tuple[int, int]]:
     """Get all positions affected by the bomb (center + adjacent)."""
     row, col = center_pos
     size = model.grid.size

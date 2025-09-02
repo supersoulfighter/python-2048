@@ -14,13 +14,13 @@ class Grid:
 
 
 
-    def save_state(self):
+    def save(self):
         """Save current state for undo."""
         self.previous_state = [row[:] for row in self.cells]
 
 
 
-    def restore_state(self) -> bool:
+    def restore(self) -> bool:
         """Restore previous state for undo. Returns True if successful."""
         if not self.previous_state:
             return False
@@ -29,6 +29,8 @@ class Grid:
         self.merged_tiles.clear()
         return True
         
+
+
     def _spawn_initial_tiles(self):
         """Spawn two initial tiles when starting a new game."""
         for _ in range(2):
@@ -46,6 +48,8 @@ class Grid:
         self.cells[row][col] = 2 if random.random() < 0.9 else 4
         return True
     
+
+
     def get_empty_cells(self) -> List[Tuple[int, int]]:
         """Return a list of (row, col) tuples for all empty cells."""
         empty = []
@@ -61,6 +65,8 @@ class Grid:
         """Get the value of a cell at the given position."""
         return self.cells[row][col]
     
+    
+    
     def set_cell(self, row: int, col: int, value: int):
         """Set the value of a cell at the given position."""
         self.cells[row][col] = value
@@ -70,6 +76,8 @@ class Grid:
     def is_full(self) -> bool:
         """Check if the grid is full (no empty cells)."""
         return len(self.get_empty_cells()) == 0
+    
+    
     
     def copy(self) -> 'Grid':
         """Create a deep copy of the grid."""
@@ -92,20 +100,22 @@ class Grid:
             row, col = new_row, new_col
         return row, col
     
+    
+    
     def is_valid_move(self, direction: Tuple[int, int]) -> bool:
         """Check if moving in the given direction would change the grid."""
         dx, dy = direction
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.cells[i][j] != 0:
-                    new_i, new_j = self._get_farthest_position(i, j, (dx, dy))
-                    if new_i != i or new_j != j:
+        for row in range(self.size):
+            for col in range(self.size):
+                if self.cells[row][col] != 0:
+                    new_row, new_col = self._get_farthest_position(row, col, (dx, dy))
+                    if new_row != row or new_col != col:
                         return True
                     # Check for possible merge
-                    next_i, next_j = new_i + dx, new_j + dy
-                    if (0 <= next_i < self.size and 
-                        0 <= next_j < self.size and 
-                        self.cells[next_i][next_j] == self.cells[i][j]):
+                    next_row, next_col = new_row + dx, new_col + dy
+                    if (0 <= next_row < self.size and 
+                        0 <= next_col < self.size and 
+                        self.cells[next_row][next_col] == self.cells[row][col]):
                         return True
         return False
 
@@ -165,64 +175,5 @@ class Grid:
                 
         return moved, points_gained
     
-    def shuffle_tiles(self) -> None:
-        """Shuffle all non-empty tiles on the grid."""
-        # Get all non-empty tiles
-        tiles = []
-        positions = []
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.cells[i][j] != 0:
-                    tiles.append(self.cells[i][j])
-                    positions.append((i, j))
-        
-        # Shuffle tiles
-        random.shuffle(tiles)
-        
-        # Clear moved tiles for animation
-        self.moved_tiles.clear()
-        
-        # Place shuffled tiles back and track movements
-        for (i, j), value in zip(positions, tiles):
-            if self.cells[i][j] != value:
-                # Find original position of this value for animation
-                orig_pos = None
-                for oi, row in enumerate(self.cells):
-                    for oj, cell in enumerate(row):
-                        if cell == value:
-                            orig_pos = (oi, oj)
-                            break
-                    if orig_pos:
-                        break
-                
-                if orig_pos:
-                    self.moved_tiles.append((orig_pos, (i, j)))
-                self.cells[i][j] = value
 
-
-
-    def remove_lowest_tile(self) -> Optional[Tuple[Tuple[int, int], int]]:
-        """Remove the tile with the lowest value from the grid.
-        Returns the position and value of the removed tile, or None if no tile was removed."""
-        min_val = float('inf')
-        min_pos = None
-        
-        # Find lowest value tile
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.cells[i][j] != 0 and self.cells[i][j] < min_val:
-                    min_val = self.cells[i][j]
-                    min_pos = (i, j)
-        
-        if min_pos:
-            # Clear any existing animations
-            self.moved_tiles.clear()
-            self.merged_tiles.clear()
-            
-            # Remove the tile
-            i, j = min_pos
-            value = self.cells[i][j]
-            self.cells[i][j] = 0
-            return (min_pos, value)
-            
-        return None
+    

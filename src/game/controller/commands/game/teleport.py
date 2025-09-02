@@ -1,23 +1,23 @@
 from typing import Tuple
-from game.model.game_state import GameState
+from game.model.game_model import GameModel
 from game.model.game_states import GameStates
-from game.model.powerups import PowerUpType
+from game.model.powerups import PowerupType
 from game.view.game_view import GameView
 
 
-def execute(model: GameState, view: GameView, from_pos: Tuple[int, int], to_pos: Tuple[int, int]) -> bool:
+def teleport(model: GameModel, view: GameView, from_pos: Tuple[int, int], to_pos: Tuple[int, int]) -> bool:
     """Execute a teleport powerup command to move a tile to an empty cell."""
     # Save current state
-    model.grid.save_state()
-    model.powerup_manager.save_state()
+    model.grid.save()
+    model.powerups.save_state()
     
     # Try to use the powerup
-    if not model.powerup_manager.use_powerup(PowerUpType.TELEPORT):
+    if not model.powerups.consume(PowerupType.TELEPORT):
         return False
         
     # Validate positions
     if not _are_valid_positions(model, from_pos, to_pos):
-        model.powerup_manager.restore_state()
+        model.powerups.restore_state()
         return False
         
     # Get value at source position
@@ -31,22 +31,12 @@ def execute(model: GameState, view: GameView, from_pos: Tuple[int, int], to_pos:
     view.create_tile_animation(from_pos, to_pos)
     
     model.state = GameStates.SWAPPING
-    view.update_powerups(model.powerup_manager.counts)
+    view.update_powerups(model.powerups.counts)
     return True
 
 
-def undo(model: GameState, view: GameView) -> bool:
-    """Undo a teleport powerup command."""
-    grid_restored = model.grid.restore_state()
-    powerups_restored = model.powerup_manager.restore_state()
-    
-    if grid_restored and powerups_restored:
-        view.update_powerups(model.powerup_manager.counts)
-        return True
-    return False
 
-
-def _are_valid_positions(model: GameState, from_pos: Tuple[int, int], to_pos: Tuple[int, int]) -> bool:
+def _are_valid_positions(model: GameModel, from_pos: Tuple[int, int], to_pos: Tuple[int, int]) -> bool:
     """Check if the positions are valid for teleporting."""
     size = model.grid.size
     from_row, from_col = from_pos

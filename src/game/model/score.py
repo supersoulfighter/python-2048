@@ -13,7 +13,7 @@ class Score:
 
 
 
-    def save_state(self):
+    def save(self):
         """Save current state for undo."""
         self.previous_state = {
             'current': self.current,
@@ -22,7 +22,7 @@ class Score:
 
 
 
-    def restore_state(self) -> bool:
+    def restore(self) -> bool:
         """Restore previous state for undo. Returns True if successful."""
         if not self.previous_state:
             return False

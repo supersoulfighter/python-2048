@@ -1,27 +1,24 @@
 import pygame
-import thorpy
-from game.model.game_state import GameState
+from game.model.game_model import GameModel
 from game.view.game_view import GameView
 from game.controller.game_controller import GameController
+from game.model.game_states import GameStates
+
+
 
 class Game:
     def __init__(self):
         pygame.init()
-       
-        # Initialize MVC components
-        self.model = GameState()
-        self.view = GameView(screen)
+        self.model = GameModel()
+        self.view = GameView()
         self.controller = GameController(self.model, self.view)
-        
-        self.running = True
 
     def run(self):
         while self.model.state != GameStates.QUITING:
+            events = pygame.event.get()
             self.model.update()          
-            self.controller.update()
-            self.view.render()
-            
-            pygame.display.flip()
+            self.controller.update(events)
+            self.view.render(events)
 
         pygame.quit()
 
