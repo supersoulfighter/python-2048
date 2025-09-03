@@ -1,10 +1,12 @@
-from typing import List, Optional
-import pygame
+from typing import List, Optional, Any
 import thorpy
 from game.view.ui.ui_element import UIElement
 
 class Box(thorpy.Box, UIElement):
-    def __init__(self, elements_list: Optional[List[UIElement]] = None):
-        if elements_list is None:
-            elements_list = []
-        super().__init__(elements_list, False)
+    def __init__(self, children: Optional[List[UIElement]] = None, style_normal:Any=None):
+        if children is None:
+            children = []
+        super().__init__(children, False, style_normal)
+
+        #Tried setting size here, but doesn't work in init apparently
+

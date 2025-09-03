@@ -5,11 +5,11 @@ from enum import Enum, auto
 GAME_NAME = "Pygame ThorPy 2048"
 
 # Layout
-GAME_WIDTH = 600
-GAME_HEIGHT = 800
-TILE_SIZE = (60, 60)
-TILE_MARGIN = 10
+GAME_WIDTH = 480
+GAME_HEIGHT = 640
+TILE_SIZE = (94, 94)
 GRID_SIZE = 4
+GRID_GAPS = (9,9)
 
 
 # Colors
@@ -26,7 +26,9 @@ COLORS = {
     512: (237, 200, 80),
     1024: (237, 197, 63),
     2048: (237, 194, 46),
-    'background': (187, 173, 160),
+    'grid': (152, 135, 118),
+    'container': (234, 231, 217),
+    'background': (250, 248, 240),
     'text_light': (249, 246, 242),
     'text_dark': (119, 110, 101)
 }
