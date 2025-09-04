@@ -1,6 +1,6 @@
 from game.model.config import GRID_SIZE
-from game.view.ui.button import Button
 from game.view.ui.box import Box
+from game.view.ui.game.cell import Cell
 from game.view.ui.tokens import TILE_SIZE, GRID_GAPS
 
 
@@ -13,7 +13,7 @@ class Grid(Box):
         for row in range(GRID_SIZE):
             grid_row = []
             for col in range(GRID_SIZE):
-                cell_button = Button("", TILE_SIZE)
+                cell_button = Cell("")
                 grid_row.append(cell_button)
                 grid_buttons.append(cell_button)
             self.grid_cells.append(grid_row)
