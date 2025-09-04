@@ -81,7 +81,7 @@ class Grid:
     
     def copy(self) -> 'Grid':
         """Create a deep copy of the grid."""
-        new_grid = Grid(self.size)
+        new_grid = Grid()
         new_grid.cells = [row[:] for row in self.cells]
         return new_grid
 

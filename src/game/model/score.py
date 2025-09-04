@@ -1,7 +1,5 @@
 import json
 import os
-from typing import Optional
-
 
 
 class Score:
@@ -42,9 +40,9 @@ class Score:
         except:
             pass
         return 0
-    
 
-    
+
+
     def _save_high_score(self):
         """Save the high score to persistent storage."""
         try:

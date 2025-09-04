@@ -23,21 +23,21 @@ class GameController:
 
     def update(self, events: List[pygame.event.Event]) -> None:
         for event in events:
-            type = event.type
+            t = event.type
 
-            if type == pygame.QUIT:
+            if t == pygame.QUIT:
                 self.model.state = GameStates.QUITING
 
-            elif type == pygame.KEYUP:
+            elif t == pygame.KEYUP:
                 keyup(self.model, self.view, event.key)
 
-            elif type == ViewEvents.SWAP:
+            elif t == ViewEvents.SWAP:
                 swap(self.model, self.view, event.pos)
 
-            elif type == ViewEvents.UNDO:
+            elif t == ViewEvents.UNDO:
                 undo(self.model, self.view)
 
-            elif type == ViewEvents.DELETE:
+            elif t == ViewEvents.DELETE:
                 delete(self.model, self.view)
             
             # Apparently, Event has an undocumented pos attribute

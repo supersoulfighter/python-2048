@@ -1,3 +1,4 @@
+from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
@@ -12,8 +13,7 @@ def undo(model: GameModel, view: GameView) -> bool:
     if model.powerups.consume(PowerupType.UNDO):
         model.grid.restore()
         model.score.restore()
-        view.update_grid(model.grid)
-        view.update_score(model.score.current, model.score.high_score)
+        update_view(model, view)
         return True
 
     return False

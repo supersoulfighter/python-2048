@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from game.model.game_state import GameModel
+from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
 from game.view.game_view import GameView

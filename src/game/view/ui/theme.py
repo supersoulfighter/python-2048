@@ -1,29 +1,11 @@
-from thorpy import theme_round
+from thorpy import theme_round, set_style_attr
 from thorpy.styles import RoundStyle
 from game.model.config import *
+from game.view.ui.game.grid import Grid
 from game.view.ui.box import Box
 from game.view.ui.button import Button
-
-
-class Colors(Enum):
-    """Colors in game"""
-    CREAM = (250, 248, 240)
-    BROWN1 = (117, 100, 82)
-    BROWN2 = (145, 128, 113)
-    BROWN3 = (152, 135, 118)
-    BROWN4 = (186, 172, 154, 77)
-    BROWN5 = (186, 172, 154)
-    BROWN6 = (234, 231, 217)
-    ORANGE = (255, 165, 0)
-    BACKGROUND = CREAM
-    TEXT = BROWN1
-    GRID = BROWN2
-    BUTTON_NORMAL = BROWN5
-    BUTTON_HOVER = ORANGE
-    BUTTON_SELECTED = BROWN3
-    BUTTON_DISABLED = BROWN4
-    CONTAINER = BROWN6
-
+from game.view.ui.label import Label
+from game.view.ui.tokens import Colors, GRID_GAPS
 
 # class BaseStyle:
 #     font = None
@@ -49,14 +31,32 @@ class Colors(Enum):
 #     border_color = (50,50,50)
 #     border_thickness = 0
 
-class BoxStyle(RoundStyle):
+font_bold_path = "./assets/fonts/Rubik-Bold.ttf"
+font_medium_path = "./assets/fonts/Rubik-Medium.ttf"
+
+class GameStyle(RoundStyle):
+    pass
+
+class LabelStyle(GameStyle):
+    font_color = Colors.TEXT.value
+    bck_color = Colors.CONTAINER.value
+    margins = (0,0)
+    radius = 0
+
+class ScoreValueStyle(GameStyle):
+    font_color = Colors.TEXT.value
+    bck_color = Colors.CONTAINER.value
+    margins = (0,0)
+    radius = 0
+
+class BoxStyle(GameStyle):
     bck_color = Colors.BACKGROUND.value
 
-class GridStyle(RoundStyle):
+class GridStyle(GameStyle):
     bck_color = Colors.GRID.value
     margins = GRID_GAPS
 
-class ContainerStyle(RoundStyle):
+class ContainerStyle(GameStyle):
     bck_color = Colors.CONTAINER.value
     margins = GRID_GAPS
 
@@ -75,7 +75,13 @@ class ButtonStyleDisabled(ButtonStyleNormal):
 
 
 def theme():
-    theme_round(base_color=COLORS['background'])
+    theme_round(base_color=Colors.BACKGROUND.value)
+
+    l = LabelStyle()
+    l.font = pygame.font.Font(font_medium_path, 12)
+    Label.style_normal = l
+
+    ScoreValueStyle.font = pygame.font.Font(font_bold_path, 20)
 
     Box.style_normal = BoxStyle()
 
@@ -84,6 +90,9 @@ def theme():
     Button.style_pressed = ButtonStylePressed()
     Button.style_locked = ButtonStyleDisabled()
 
+    Grid.style_normal = GridStyle()
+
+    # set_style_attr(attr="font_name", value=font_bold_path, states="all", only_to_cls=Label)
     # thorpy.set_style_attr("font_color", (0,)*3, "all")
     # thorpy.set_style_attr("font_color", thorpy.graphics.enlighten(thorpy.Button.style_normal.font_color), "hover")
 

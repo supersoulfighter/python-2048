@@ -1,11 +1,9 @@
-from typing import List, Optional, Tuple
 import pygame
 
-from game.model.grid import Grid
-from game.model.score import Score
 from game.model.game_states import GameStates
+from game.model.grid import Grid
 from game.model.powerups import Powerups
-
+from game.model.score import Score
 
 
 class GameModel:

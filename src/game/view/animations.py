@@ -1,7 +1,8 @@
 """Animation utilities for 2048 game."""
-import pygame
+from typing import Dict, Optional, Tuple
+
 import tween
-from typing import Dict, List, Optional, Tuple, Any
+
 
 class AnimationManager:
     def __init__(self):

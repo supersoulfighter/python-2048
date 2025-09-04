@@ -12,3 +12,6 @@ def keyup(model: GameModel, view: GameView, key:int) -> bool:
 
     if key in DIRECTION_KEYS:
         move(model, view, DIRECTION_KEYS[key])
+        return True
+
+    return False
