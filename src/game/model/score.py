@@ -6,7 +6,6 @@ class Score:
     def __init__(self):
         self.current = 0
         self.high_score = self._load_high_score()
-        self.multiplier = 1
         self.previous_state = None  # For undo/redo
 
 
@@ -15,7 +14,7 @@ class Score:
         """Save current state for undo."""
         self.previous_state = {
             'current': self.current,
-            'multiplier': self.multiplier
+            'high_score': self.high_score
         }
 
 
@@ -25,7 +24,7 @@ class Score:
         if not self.previous_state:
             return False
         self.current = self.previous_state['current']
-        self.multiplier = self.previous_state['multiplier']
+        self.high_score = self.previous_state['high_score']
         return True
 
 
@@ -54,16 +53,8 @@ class Score:
 
 
     def update(self, points: int):
-        """Update the score with the given points, applying any active multiplier."""
-        points *= self.multiplier
+        """Update the score with the given points"""
         self.current += points
         if self.current > self.high_score:
             self.high_score = self.current
             self._save_high_score()
-            
-
-
-
-    def set_multiplier(self, value: int):
-        """Set the score multiplier (e.g., for double score powerup)."""
-        self.multiplier = value

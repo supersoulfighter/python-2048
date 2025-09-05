@@ -1,5 +1,6 @@
 from typing import Tuple
 
+from game.controller.commands.game.earn import earn
 from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
@@ -17,24 +18,24 @@ def move(model: GameModel, view: GameView, direction: Tuple[int, int]) -> bool:
     # Make the move
     model.grid.save()
     model.score.save()
-    moved, points = model.grid.make_move(direction)
+    moved, points, highest = model.grid.make_move(direction)
     if not moved:
         return False
-        
-    # Update game state
-    model.score.update(points)
 
     # Check for win condition
     for i in range(model.grid.size):
         for j in range(model.grid.size):
             if model.grid.get_cell(i, j) == 2048:
                 model.state = GameStates.WON
-                break
+                return True
 
     # Check for game over
     if not any(model.grid.is_valid_move(d) for d in [(0, 1), (1, 0), (0, -1), (-1, 0)]):
         model.state = GameStates.LOST
+        return True
 
-    # Update view with current state
+    # Update game state
+    earn(model, highest)
+    model.score.update(points)
     update_view(model, view)
     return True

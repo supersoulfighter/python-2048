@@ -121,15 +121,16 @@ class Grid:
 
 
 
-    def make_move(self, direction: Tuple[int, int]) -> Tuple[bool, int]:
-        """Make a move in the given direction. Returns (moved, points_gained)."""
+    def make_move(self, direction: Tuple[int, int]) -> Tuple[bool, int, int]:
+        """Make a move in the given direction. Returns (moved, score earned total, highest merge score)."""
         if not self.is_valid_move(direction):
-            return False, 0
+            return False, 0, 0
             
         self.moved_tiles.clear()
         self.merged_tiles.clear()
         dx, dy = direction
-        points_gained = 0
+        points = 0
+        highest = 0
         
         # Determine traversal order
         rows = range(self.size)
@@ -158,7 +159,8 @@ class Grid:
                     self.cells[next_i][next_j] *= 2
                     self.cells[i][j] = 0
                     merged[next_i][next_j] = True
-                    points_gained += self.cells[next_i][next_j]
+                    points += self.cells[next_i][next_j]
+                    highest = max(highest, self.cells[next_i][next_j])
                     self.moved_tiles.append(((i, j), (next_i, next_j)))
                     self.merged_tiles.append(((next_i, next_j), self.cells[next_i][next_j]))
                     moved = True
@@ -173,7 +175,7 @@ class Grid:
         if moved:
             self._spawn_new_tile()
                 
-        return moved, points_gained
+        return moved, points, highest
     
 
     

@@ -31,13 +31,13 @@ class GameController:
             elif t == pygame.KEYUP:
                 keyup(self.model, self.view, event.key)
 
-            elif t == ViewEvents.SWAP:
+            elif t == ViewEvents.SWAP.value:
                 swap(self.model, self.view, event.pos)
 
-            elif t == ViewEvents.UNDO:
+            elif t == ViewEvents.UNDO.value:
                 undo(self.model, self.view)
 
-            elif t == ViewEvents.DELETE:
+            elif t == ViewEvents.DELETE.value:
                 delete(self.model, self.view)
             
             # Apparently, Event has an undocumented pos attribute

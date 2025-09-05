@@ -1,5 +1,4 @@
 import pygame
-import game.view.ui.theme
 from game.model.game_model import GameModel
 from game.view.game_view import GameView
 from game.controller.game_controller import GameController

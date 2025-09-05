@@ -1,8 +1,9 @@
 from typing import Dict
 
 from pygame.event import post, Event
+from pygame.image import load
 
-from game.model.config import *
+from game.model.config import ViewEvents
 from game.view.ui.button import Button
 from game.view.ui.box import Box
 from game.view.ui.image import Image
@@ -16,9 +17,11 @@ class Powerups(Box):
 
         powerups = [ViewEvents.UNDO, ViewEvents.SWAP, ViewEvents.DELETE]
         for p in powerups:
+            def onclick(powerup=p):
+                post(Event(powerup.value))
             n = p.name.lower()
-            img = Image(pygame.image.load(f"./assets/images/{n}.svg"))
-            btn = Button("", (48,48), lambda: post(Event(p.value)))
+            img = Image(load(f"./assets/images/{n}.svg"))
+            btn = Button("", (48,48), onclick)
             btn.add_child(img)
             self.buttons[n] = btn
 
@@ -28,7 +31,7 @@ class Powerups(Box):
 
 
     def update_powerups(self, powerups: Dict):
-        for name, powerup in powerups.items():
-            button = self.buttons.get(name)
+        for powerup_type, count in powerups.items():
+            button = self.buttons.get(powerup_type.name.lower())
             if button:
-                button.set_enabled(powerup.active)
+                button.set_enabled(count > 0)
