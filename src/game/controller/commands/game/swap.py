@@ -1,55 +1,78 @@
-from typing import Tuple
-
 from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
 from game.model.powerups import PowerupType
 from game.view.game_view import GameView
+from game.view.ui.game.cell import Cell
 
 
-def swap(model: GameModel, view: GameView, pos1: Tuple[int, int], pos2: Tuple[int, int]) -> bool:
-    """Execute a swap powerup command between two positions."""
+def swap(model: GameModel, view: GameView, cell:Cell=None) -> bool:
+    """Handles all phases of swapping (activation, selection, etc.) so gets called multiple times per swap."""
 
-    if model.state != GameStates.PLAYING:
-        return False
+    # Comes from click on swap button
+    if model.state == GameStates.PLAYING:
+        # If user has swap powerups, can enter swapping mode
+        if model.powerups.count(PowerupType.SWAP) > 0:
+            __activate_swap_mode(model, view, True)
+        else:
+            return False
 
-    # Validate positions
-    val1 = model.grid.get_cell(*pos1)
-    val2 = model.grid.get_cell(*pos2)
-    if not _are_valid_positions(model, pos1, pos2, val1, val2):
-        return False
+    # Clicked on cell while in swap mode
+    elif model.state == GameStates.SWAPPING:
+        # Click on swap button again exits swapping mode
+        if cell is None:
+            __activate_swap_mode(model, view, False)
 
-    # Try to use the powerup
-    if model.powerups.consume(PowerupType.SWAP):
-        model.grid.save()
-        model.score.save()
-        # Perform the swap
-        model.grid.set_cell(*pos1, val2)
-        model.grid.set_cell(*pos2, val1)
-        update_view(model, view)
-        return True
+        # Don't allow swapping with empty cells
+        elif cell.text == "":
+            return False
 
-    return False
+        # Unselect by clicking same cell again
+        elif cell in view.grid.selected_cells:
+            cell.select(False)
+            view.grid.selected_cells.remove(cell)
 
+        else:
+            # Select
+            cell.select(True)
+            view.grid.selected_cells.append(cell)
 
+            # Can swap if two cells selected
+            if len(view.grid.selected_cells) > 1:
+                __perform_swap(model, view)
 
-def _are_valid_positions(model: GameModel, pos1: Tuple[int, int], pos2: Tuple[int, int], val1:int, val2:int) -> bool:
-    """Check if the positions are valid for swapping."""
-
-   # Don't allow swapping with self
-    if pos1 == pos2:
-        return False
-
-    # Don't allow swapping with empty cells
-    if val1 == 0 or val2 == 0:
-        return False
-
-    # Check bounds
-    size = model.grid.size
-    row1, col1 = pos1
-    row2, col2 = pos2
-    if not (0 <= row1 < size and 0 <= col1 < size and
-            0 <= row2 < size and 0 <= col2 < size):
-        return False
-
+    update_view(model, view)
     return True
+
+
+
+def __activate_swap_mode(model: GameModel, view: GameView, activate:bool) -> None:
+    """Activate swap mode."""
+    if activate:
+        view.powerups.powerup_active = PowerupType.SWAP
+        model.state = GameStates.SWAPPING
+    else:
+        view.powerups.powerup_active = None
+        model.state = GameStates.PLAYING
+        if len(view.grid.selected_cells) > 0:
+            for cell in view.grid.selected_cells:
+                cell.select(False)
+            view.grid.selected_cells.clear()
+
+
+
+def __perform_swap(model: GameModel, view: GameView) -> None:
+    """Perform the swap."""
+    model.powerups.consume(PowerupType.SWAP)
+    model.grid.save()
+    model.score.save()
+    cell1 = view.grid.selected_cells[0]
+    cell2 = view.grid.selected_cells[1]
+    val1 = int(cell1.text)
+    val2 = int(cell2.text)
+    model.grid.set_cell(cell1.row, cell1.col, val2)
+    model.grid.set_cell(cell2.row, cell2.col, val1)
+    cell1.select(False)
+    cell2.select(False)
+    view.grid.selected_cells.clear()
+    __activate_swap_mode(model, view, False)

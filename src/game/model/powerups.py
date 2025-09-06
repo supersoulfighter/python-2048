@@ -12,11 +12,14 @@ class Powerups:
         self.counts: Dict[PowerupType, int] = {p: 0 for p in PowerupType}
 
 
+    def count(self, powerup_type: PowerupType) -> int:
+        """Get the current count of powerups of the specified type."""
+        return self.counts[powerup_type]
+
 
     def earn(self, powerup_type: PowerupType, count: int = 1):
         """Add powerups of the specified type."""
         self.counts[powerup_type] += count
-
 
 
     def consume(self, powerup_type: PowerupType) -> bool:

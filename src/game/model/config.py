@@ -24,6 +24,7 @@ class ViewEvents(Enum):
     UNDO = pygame.event.custom_type()
     SWAP = pygame.event.custom_type()
     DELETE = pygame.event.custom_type()
+    CELL_CLICK = pygame.event.custom_type()
 
 
 class PowerupType(Enum):

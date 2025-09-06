@@ -36,6 +36,7 @@ from game.view.ui.tokens import Colors, GRID_GAPS, FONT_MEDIUM_PATH, FONT_BOLD_P
 class GameStyle(RoundStyle):
     pass
 
+
 class LabelStyle(GameStyle):
     font_color = Colors.TEXT.value
     bck_color = Colors.CONTAINER.value
@@ -57,23 +58,29 @@ class GridStyle(GameStyle):
 
 class CellStyle(GameStyle):
     bck_color = Colors.TILE_.value
+    border_color = Colors.SELECTED.value
 
 class ContainerStyle(GameStyle):
     bck_color = Colors.CONTAINER.value
     margins = GRID_GAPS
 
+
 class ButtonStyleNormal(RoundStyle):
     bck_color = Colors.BUTTON_NORMAL.value
-    font_size = 0
+    border_color = Colors.SELECTED.value
 
 class ButtonStyleHover(ButtonStyleNormal):
     bck_color = Colors.BUTTON_HOVER.value
+    border_color = Colors.SELECTED.value
 
 class ButtonStylePressed(ButtonStyleNormal):
     bck_color = Colors.BUTTON_SELECTED.value
+    border_color = Colors.SELECTED.value
 
 class ButtonStyleDisabled(ButtonStyleNormal):
     bck_color = Colors.BUTTON_DISABLED.value
+    border_color = Colors.SELECTED.value
+
 
 
 def theme():

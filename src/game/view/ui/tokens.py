@@ -7,6 +7,12 @@ GAME_GAP = 30
 TILE_SIZE = (90,)*2
 GRID_GAPS = (9,)*2
 
+POWERUP_BUTTON_SIZE = (48,)*2
+
+# Styling
+SELECTED_BORDER_WIDTH = 4
+UNSELECTED_BORDER_WIDTH = 0
+
 #Fonts
 FONT_BOLD_PATH = "./assets/fonts/Rubik-Bold.ttf"
 FONT_MEDIUM_PATH = "./assets/fonts/Rubik-Medium.ttf"
@@ -25,6 +31,7 @@ class Colors(Enum):
     BROWN5 = (186, 172, 154)
     BROWN6 = (234, 231, 217)
     ORANGE = (255, 165, 0)
+    GREEN = (76, 130, 88)
     BACKGROUND = CREAM
     TEXT = BROWN1
     TEXT_INVERSE = WHITE
@@ -34,6 +41,7 @@ class Colors(Enum):
     BUTTON_SELECTED = BROWN3
     BUTTON_DISABLED = BROWN4
     CONTAINER = BROWN6
+    SELECTED = GREEN
     TILE_ = (205, 193, 180)
     TILE_2 = (238, 228, 218)
     TILE_4 = (237, 224, 200)

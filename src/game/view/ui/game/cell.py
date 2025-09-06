@@ -1,14 +1,23 @@
 from typing import override
+
+from pygame.event import Event, post
+
+from game.model.config import ViewEvents
 from game.view.ui.text import Text
-from game.view.ui.tokens import TILE_SIZE, Colors, TILE_FONT_S, TILE_FONT_L
+from game.view.ui.tokens import TILE_SIZE, Colors, SELECTED_BORDER_WIDTH, UNSELECTED_BORDER_WIDTH
 from game.view.ui.ui_element import UIElement
 
 
 
 class Cell(Text, UIElement):
-    def __init__(self, text: str):
+    def __init__(self, text: str,  row:int, col:int):
+        self.row = row
+        self.col = col
         super().__init__(text=text)
         self.set_size(TILE_SIZE)
+        self.at_unclick = lambda r=row,c=col: post(Event(ViewEvents.CELL_CLICK.value, {"cell":self}))
+
+
 
     @override
     def set_text(self, text: str):
@@ -29,3 +38,11 @@ class Cell(Text, UIElement):
         else:
             s = self.style_normal
             self.set_style_attr("font", s.font_l)
+
+
+
+    def select(self, select:bool):
+        if select:
+            self.set_style_attr("border_thickness", SELECTED_BORDER_WIDTH)
+        else:
+            self.set_style_attr("border_thickness", UNSELECTED_BORDER_WIDTH)

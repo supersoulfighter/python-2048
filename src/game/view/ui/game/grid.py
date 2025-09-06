@@ -8,12 +8,13 @@ class Grid(Box):
     def __init__(self):
 
         self.grid_cells = []
+        self.selected_cells = []
 
         grid_buttons = []
         for row in range(GRID_SIZE):
             grid_row = []
             for col in range(GRID_SIZE):
-                cell_button = Cell("")
+                cell_button = Cell("", row, col)
                 grid_row.append(cell_button)
                 grid_buttons.append(cell_button)
             self.grid_cells.append(grid_row)
