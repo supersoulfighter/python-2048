@@ -1,3 +1,4 @@
+from game.controller.commands.game.activate_mode import activate_mode
 from game.controller.commands.game.update_view import update_view
 from game.model.game_model import GameModel
 from game.model.game_states import GameStates
@@ -9,21 +10,21 @@ from game.view.ui.game.cell import Cell
 def swap(model: GameModel, view: GameView, cell:Cell=None) -> bool:
     """Handles all phases of swapping (activation, selection, etc.) so gets called multiple times per swap."""
 
-    # Comes from click on swap button
+    # Comes from click on powerup button
     if model.state == GameStates.PLAYING:
-        # If user has swap powerups, can enter swapping mode
+        # If user has earned powerups, can enter swapping mode
         if model.powerups.count(PowerupType.SWAP) > 0:
-            __activate_swap_mode(model, view, True)
+            activate_mode(model, view, GameStates.SWAPPING,True)
         else:
             return False
 
-    # Clicked on cell while in swap mode
+    # Clicked on cell while in mode
     elif model.state == GameStates.SWAPPING:
-        # Click on swap button again exits swapping mode
+        # Click on powerup button again exits mode
         if cell is None:
-            __activate_swap_mode(model, view, False)
+            activate_mode(model, view, GameStates.SWAPPING, False)
 
-        # Don't allow swapping with empty cells
+        # Clicking on empty cell ignored
         elif cell.text == "":
             return False
 
@@ -46,21 +47,6 @@ def swap(model: GameModel, view: GameView, cell:Cell=None) -> bool:
 
 
 
-def __activate_swap_mode(model: GameModel, view: GameView, activate:bool) -> None:
-    """Activate swap mode."""
-    if activate:
-        view.powerups.powerup_active = PowerupType.SWAP
-        model.state = GameStates.SWAPPING
-    else:
-        view.powerups.powerup_active = None
-        model.state = GameStates.PLAYING
-        if len(view.grid.selected_cells) > 0:
-            for cell in view.grid.selected_cells:
-                cell.select(False)
-            view.grid.selected_cells.clear()
-
-
-
 def __perform_swap(model: GameModel, view: GameView) -> None:
     """Perform the swap."""
     model.powerups.consume(PowerupType.SWAP)
@@ -75,4 +61,4 @@ def __perform_swap(model: GameModel, view: GameView) -> None:
     cell1.select(False)
     cell2.select(False)
     view.grid.selected_cells.clear()
-    __activate_swap_mode(model, view, False)
+    activate_mode(model, view, GameStates.SWAPPING, False)
